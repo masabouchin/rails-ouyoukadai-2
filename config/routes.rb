@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
+  get '/search', to: 'search#search'
   resources :users,only: [:show,:index,:edit,:update] do
-  get :search, on: :collection
   resources :relationships, only: [:create, :destroy]
   get 'follows' => 'relationships#follower', as: 'follows'
   get 'followers' => 'relationships#followed', as: 'followers'

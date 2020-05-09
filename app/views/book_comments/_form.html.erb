@@ -1,0 +1,5 @@
+   <div class="comment-form">
+      <%= form_with(model: [@userbook, book_comment]) do |form| %>
+        <%= form.text_area :comment, size: "90x5" %>
+        <%= form.submit '送信' %>
+      <% end %>

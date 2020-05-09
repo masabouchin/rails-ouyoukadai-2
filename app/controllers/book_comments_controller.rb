@@ -2,7 +2,7 @@ class BookCommentsController < ApplicationController
   def create
     @book = Book.find(params[:book_id])
     @book_new = Book.new
-    @book_comment = @book.book_comments.new(book_comment_params)
+    @book_comment = @book.book_comments.build(book_comment_params)
     @book_comment.user_id = current_user.id
     if @book_comment.save
       flash[:success] = "Comment was successfully created."
@@ -26,7 +26,7 @@ class BookCommentsController < ApplicationController
   private
 
   def book_comment_params
-    params.require(:book_comment).permit(:comment)
+    params.require(:book_comment).permit(:comment, :user_id, :book_id)
   end
 
 

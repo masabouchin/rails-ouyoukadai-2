@@ -27,18 +27,13 @@
 					<td><%= @userbook.body %></td>
  <!-- いいね機能 -->
         <td>
-           <% if @userbook.favorited_by?(current_user) %>
-            <%= link_to book_favorites_path(book_id:@userbook.id), method: :delete do %>
-              <%#= fa_icon "heart", text: "#{book.favorites.count}", style: "color: red;" %>
-              <span class="glyphicon glyphicon-heart"><%= @userbook.favorites.count%></span>
-            <% end %>
-          <% else %>
-						<%= link_to book_favorites_path(book_id:@userbook.id), method: :post do %>
-              <%#= fa_icon "heart-o", text: "#{book.favorites.count}", style: "color: red;" %>
-              <span class="glyphicon glyphicon-heart-empty"><%= @userbook.favorites.count %></span>
-            <% end %>
-          <% end %>
-        </td>
+
+<div id="favorite_area"><!-- #① -->
+      <!-- 投稿されたコメント一覧をブログの詳細ページに表示するためのrender -->
+      <%= render partial: 'favorites/index', locals: { favorites: @favorites } %>
+    </div>  
+
+
         <td>コメント数：<%= @userbook.book_comments.count %></td>
 
 					<%if current_user == @user %>
@@ -48,26 +43,15 @@
 				</tr>
 			</table>
 			<table class="show-tb">
-      <% @book_comments.each do |book_comment| %> <!-- コメント一覧 -->
-        <tr>
-          <td>
-            <%= link_to user_path(book_comment.user), class: "user_#{book_comment.user.id}" do %>
-              <%= attachment_image_tag book_comment.user, :profile_image, :fill, 50, 50, fallback: "no_image.jpg", size: "50x50" %><br>
-              <%= book_comment.user.name %>
-            <% end %>
-          </td>
-          <td><%= book_comment.comment %></td>
-          <% unless current_user != book_comment.user %>
-            <td><%= link_to 'Destroy', book_book_comments_path(book_comment.id), class: 'btn-sm btn-danger', method: :delete %></td>
-          <% end %>
-        </tr>
-      <% end %>
+      <div id="comments_area"><!-- #① -->
+      <!-- 投稿されたコメント一覧をブログの詳細ページに表示するためのrender -->
+      <%= render partial: 'book_comments/index', locals: { book_comments: @book_comments } %>
+    </div>  
     </table>
-    <div class="comment-form">
-      <%= form_for [@userbook, @book_comment] do |f| %>
-        <%= f.text_area :comment, size: "90x5" %>
-        <%= f.submit '送信' %>
-      <% end %>
+    <% if user_signed_in? %>
+      <!-- コメント入力欄をブログの詳細ページに表示するためのrender -->
+      <%= render partial: 'book_comments/form', locals: { book_comment: @book_comment, book: @book } %>
+    <% end %>
     </div>
 
 	</div>
